@@ -1,5 +1,6 @@
-from prover20200407unk.interface import prove
-
+import sys
+sys.path.insert(1, '/pylibs/interface')
+import interface
 
 if __name__ == "__main__":
   assumptions = [
@@ -8,4 +9,4 @@ if __name__ == "__main__":
 
   goal = "(Believes! john (and happy smiling))"
 
-  print(prove(assumptions, goal))
+  print(interface.prove(assumptions, goal))
