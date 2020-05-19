@@ -1,3 +1,5 @@
+# Demo for running ShadowProver within JuypterLab/Docker environment
+
 import sys
 sys.path.insert(1, '/pylibs/interface')
 import interface
