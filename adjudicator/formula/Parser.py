@@ -1,4 +1,4 @@
-
+from .Justification import Justification
 
 def parse_list(fstrings):
 
@@ -14,10 +14,10 @@ def parse(fstring):
   if(fstring.startswith("(Believes!")):
     if(fstring[10] == ' '):
       from .Belief import Belief
-      return Belief(fstring)
+      return Belief(fstring, Justification(isgiven=True))
     else:
       from .SFBelief import SFBelief
-      return SFBelief(fstring)
+      return SFBelief(fstring, Justification(isgiven=True))
 
   #elif(fstring.startswith("Perceives!"):
   #  return Perceives(fstring)
@@ -39,25 +39,26 @@ def parse(fstring):
 
   elif(fstring.startswith("(not")):
     from .Not import Not
-    return Not(fstring)
+    return Not(fstring, Justification(isgiven=True))
 
   elif(fstring.startswith("(and")):
     from .And import And
-    return And(fstring)
+    return And(fstring, Justification(isgiven=True))
 
   elif(fstring.startswith("(or")):
     from .Or import Or
-    return Or(fstring)
+    return Or(fstring, Justification(isgiven=True))
 
   elif(fstring.startswith("(implies")):
     from .Implication import Implication
-    return Implication(fstring)
+    return Implication(fstring, Justification(isgiven=True))
 
   elif(fstring.startswith("(iff")):
     from .BiConditional import BiConditional
-    return BiConditional(fstring)
+    return BiConditional(fstring, Justification(isgiven=True))
 
   # A propositional atom (or unimplemented formula types)
   else:
     from .Formula import Formula
-    return Formula(fstring)
+    return Formula(fstring, Justification(isgiven=True))
+

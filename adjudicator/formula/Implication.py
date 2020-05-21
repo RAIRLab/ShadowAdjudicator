@@ -1,11 +1,12 @@
 from .Proposition import Proposition
 
-# fstring -- String        -- Original input string
-# args    -- List(Formula) -- Sub-formulae (arguments to proposition)
+# fstring       -- String        -- Original input string
+# justification -- Justification -- Links the formula to its justification
+# args          -- List(Formula) -- Sub-formulae (arguments to proposition)
 class Implication(Proposition):
 
-  def __init__(self, fstring):
-    super().__init__(fstring)
+  def __init__(self, fstring, justification):
+    super().__init__(fstring, justification)
 
 
 
