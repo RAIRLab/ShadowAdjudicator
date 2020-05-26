@@ -26,6 +26,10 @@ class SFBelief(Belief):
     return super().__eq__(other)
 
 
+
+  def __hash__(self):
+    return super().__hash__()
+
 ### END CLASS DEFINITION ###
 
 # Returns a new SFBelief object from arguments

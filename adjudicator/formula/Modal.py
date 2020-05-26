@@ -25,4 +25,9 @@ class Modal(Formula):
 
 
   def __eq__(self, other):
-    return super().__eq__(other)
+    return isinstance(other, Modal) and self.agent == other.agent and self.time == other.time and self.formula == other.formula
+
+
+
+  def __hash__(self):
+    return super().__hash__()

@@ -20,5 +20,10 @@ class Formula:
 
 
 
+  def __hash__(self):
+    return hash(self.fstring)
+
+
+
   def get_justification(self):
     return str(self.justification)

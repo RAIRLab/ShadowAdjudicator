@@ -17,3 +17,8 @@ class Implication(Proposition):
 
   def __eq__(self, other):
     return super().__eq__(other)
+
+
+
+  def __hash__(self):
+    return super().__hash__()

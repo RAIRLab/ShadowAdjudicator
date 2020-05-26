@@ -1,10 +1,14 @@
-# Functions for printing proof of goal formula
+# Functions for generating proofs
+# (Both finding a proof and printing it)
 
-from formula.Formula import Formula
+from formula.Formula         import Formula
 from expanders.SFModusPonens import sf_modus_ponens
+from expanders.SFConjElim    import sf_conj_elim
+
+INDENT = "  " # Amount of indent for sub-parts of proofs
 
 def prove(base, goal):
-  expanders = [sf_modus_ponens]
+  expanders = [sf_modus_ponens, sf_conj_elim]
 
   progress = True
   while(progress):
@@ -40,13 +44,13 @@ def generate_proof_helper(formula, sep):
     out =  sep + "PROOF OF: " + str(formula) + "\n"
     out += sep + formula.get_justification() + "\n"
 
-    sep += "  "                               # Increase indent
+    sep       += INDENT                       # Increase indent
     justifier = formula.justification.formula # Formula(e) which justify formula
 
     if(isinstance(justifier, Formula)):             # If justification is a single formula
       out += generate_proof_helper(justifier, sep)  # Recursively output its justification
 
-    else:                                      # If it's a list of formulae
+    else:                                     # If it's a list of formulae
       for f in formula.justification.formula: # Recursively output justifications of each formula       
         out += generate_proof_helper(f, sep)
 
