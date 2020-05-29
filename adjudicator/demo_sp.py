@@ -4,11 +4,18 @@ import sys
 sys.path.insert(1, '/pylibs/interface')
 import interface
 
-if __name__ == "__main__":
+
+
+def sp_warmup():
   assumptions = [
     "(Believes! john happy)",
     "(Believes! john smiling)"]
 
   goal = "(Believes! john (and happy smiling))"
 
-  print(interface.prove(assumptions, goal))
+  return interface.prove(assumptions, goal)
+
+
+
+if __name__ == "__main__":
+  print(sp_warmup())

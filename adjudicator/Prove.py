@@ -5,12 +5,22 @@ from formula.Formula         import Formula
 from expanders.SFModusPonens import sf_modus_ponens
 from expanders.SFConjElim    import sf_conj_elim
 
-INDENT = "  " # Amount of indent for sub-parts of proofs
+INDENT   = "  "  # Amount of indent for sub-parts of proofs
+SPINDENT = "-->" # Indent to indicate ShadowProver portion of proof
 
-def prove(base, goal):
-  expanders = [sf_modus_ponens, sf_conj_elim]
+# Attempts to prove a Formula goal given a list of
+# assumptions base.
+# expanders is a list of function callers which (attempt to)
+# apply annotated modal inference schemeata to the formulae
+# in the assumption base
+# If levels=None, only expanders are used.
+# Otherwise, level_provers is a list of functions which use SP to prove level definitions
+#            level_exp     is a list of functions which check the assumption base for the definition
+# functions
+def prove(base, goal, expanders=[sf_modus_ponens, sf_conj_elim], level_provers=None, level_exp=None):
 
   progress = True
+
   while(progress):
 
     # Goal has been proved -- return proof
@@ -20,12 +30,23 @@ def prove(base, goal):
 
     progress = False
 
+    # Try all level definitions, if given
+    if(not level_provers == None):
+      for level in level_provers:
+        if(level(base, goal)): progress = True
+
+    # Try all level expanders, if given
+    if(not level_exp == None):
+      for level in level_exp:
+        if(level(base)): progress = True
+
     # Try all expanders
-    # If none of them are able to expand the base,
-    # we're done
     for expand in expanders:
       if(expand(base)): progress = True
 
+
+  # If all level definitions & expanders
+  # failed to return any new formulae, we're done
   return "FAILED"
 
 
@@ -41,11 +62,21 @@ def generate_proof_helper(formula, sep):
     return sep + "GIVEN: " + str(formula) + "\n"
 
   else:
-    out =  sep + "PROOF OF: " + str(formula) + "\n"
-    out += sep + formula.get_justification() + "\n"
+    out = sep + "PROOF OF: " + str(formula) + "\n"
 
-    sep       += INDENT                       # Increase indent
     justifier = formula.justification.formula # Formula(e) which justify formula
+
+    # If proved using ShadowProver...
+    if(formula.justification.proved_via_sp):
+      out += sep + "Proved via ShadowProver:\n"
+      proof = sep + SPINDENT + formula.justification.rule.replace("\n", "\n"+sep+SPINDENT) # Format SP output
+      out += proof + "\n"
+      return out
+
+    # If proved using ShadowAdjudicator...
+    else: out += sep + formula.get_justification() + "\n"
+
+    sep += INDENT                                   # Increase indent
 
     if(isinstance(justifier, Formula)):             # If justification is a single formula
       out += generate_proof_helper(justifier, sep)  # Recursively output its justification
@@ -55,4 +86,5 @@ def generate_proof_helper(formula, sep):
         out += generate_proof_helper(f, sep)
 
     return out
+
 

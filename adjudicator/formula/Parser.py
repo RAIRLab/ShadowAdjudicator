@@ -19,8 +19,13 @@ def parse(fstring):
       from .SFBelief import SFBelief
       return SFBelief(fstring, Justification(isgiven=True))
 
-  #elif(fstring.startswith("Perceives!"):
-  #  return Perceives(fstring)
+  elif(fstring.startswith("(Perceives!")):
+    from .Perceives import Perceives
+    return Perceives(fstring, Justification(isgiven=True))
+
+  elif(fstring.startswith("(Says!")):
+    from .Says import Says
+    return Says(fstring, Justification(isgiven=True))
 
   #elif(fstring.startswith("(Knows!"):
   #  return Knowledge(fstring)
@@ -56,6 +61,10 @@ def parse(fstring):
   elif(fstring.startswith("(iff")):
     from .BiConditional import BiConditional
     return BiConditional(fstring, Justification(isgiven=True))
+
+  elif(fstring.startswith("(")):
+    from .Predicate import Predicate
+    return Predicate(fstring, Justification(isgiven=True))
 
   # A propositional atom (or unimplemented formula types)
   else:
