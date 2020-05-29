@@ -1,8 +1,11 @@
 from .Belief import Belief
 
-# fstring       -- String        -- Original input string (e.g. (Believes!4 alice now phi))
-# justification -- Justification -- Links the formula to its justification
-# args          -- List(Formula) -- Sub-formulae (arguments to proposition)
+# fstring        -- String        -- Original input string (e.g. (Believes!4 alice now phi))
+# fstring_no_ann -- String        -- String form with no strength factor 
+# justification  -- Justification -- Links the formula to its justification
+# agent         -- String
+# time          -- String
+# formula       -- Formula       -- Sub-formula (object of modal operator)
 class SFBelief(Belief):
 
   def __init__(self, fstring, justification):
@@ -14,6 +17,8 @@ class SFBelief(Belief):
     except ValueError:
       print("Improperly formatted SF belief (invalid strength factor)")
       exit()
+
+    self.fstring_no_ann = fstring[:10] + fstring[11:]
 
 
 
@@ -29,6 +34,8 @@ class SFBelief(Belief):
 
   def __hash__(self):
     return super().__hash__()
+
+
 
 ### END CLASS DEFINITION ###
 

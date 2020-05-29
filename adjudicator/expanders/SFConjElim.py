@@ -1,7 +1,7 @@
 from formula.SFBelief      import SFBelief, makeSFBelief
 from formula.And           import And, makeAnd
 from formula.Justification import Justification
-from expanders.utils       import add_to_base
+from utils                 import add_to_base
 
 # base is a list of Formula
 # If the base contains a SFBelief with a conjunction as the sub-formulae,

@@ -2,7 +2,9 @@ from .Modal import Modal
 
 # fstring       -- String        -- Original input string
 # justification -- Justification -- Links the formula to its justification
-# args          -- List(Formula) -- Sub-formulae (arguments to proposition)
+# agent         -- String
+# time          -- String
+# formula       -- Formula       -- Sub-formula (object of modal operator)
 class Belief(Modal):
 
   def __init__(self, fstring, justification):
