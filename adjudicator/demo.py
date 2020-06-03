@@ -1,6 +1,6 @@
 # Demo for running Strength Factor inference rules
 
-from formula.Parser          import parse_list, parse
+from formula.Parser          import parse_list, parse_fstring
 from Prove                   import prove
 
 if __name__ == "__main__":
@@ -12,7 +12,7 @@ if __name__ == "__main__":
   goal = "(Believes!4 john now happy)"
 
   base         = parse_list(assumptions) # Parse into Python objects
-  goal_formula = parse(goal)
+  goal_formula = parse_fstring(goal)
 
   print(prove(base,goal_formula))
 

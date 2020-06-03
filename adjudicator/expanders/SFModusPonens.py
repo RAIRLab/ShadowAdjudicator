@@ -1,4 +1,4 @@
-from formula.SFBelief      import SFBelief, makeSFBelief
+from formula.SFBelief      import SFBelief
 from formula.Implication   import Implication
 from formula.Justification import Justification
 from utils                 import add_to_base
@@ -28,8 +28,8 @@ def sf_modus_ponens(base):
                 if(f.formula == antecedent):                                                                                  # with the antecedent of the implication
                   strength = min(formula.strength, f.strength)                                                                # take the minimum strength
                   jus      = Justification(isgiven=False, formula=[formula, f], rule="Modus ponens through annotated belief")
-                  belief   = makeSFBelief(strength, f.agent, f.time, consequent, jus)                                         # and generate an SFBelief in the consequent
-                  if(add_to_base(base, belief)): modifiedBase = True                                                            # Then add it if it is not already in the base
+                  belief   = SFBelief.from_args(f.agent, f.time, consequent, strength, jus)                                   # and generate an SFBelief in the consequent
+                  if(add_to_base(base, belief)): modifiedBase = True                                                          # Then add it if it is not already in the base
 
   return modifiedBase
 

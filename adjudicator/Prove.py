@@ -26,7 +26,7 @@ def prove(base, goal, expanders=[sf_modus_ponens, sf_conj_elim], level_provers=N
     # Goal has been proved -- return proof
     if(goal in base):
       goal_proved = base[base.index(goal)] # Find goal_formula in base
-      return generate_proof(goal_proved)
+      return generate_proof(goal_proved, base)
 
     progress = False
 
@@ -51,12 +51,12 @@ def prove(base, goal, expanders=[sf_modus_ponens, sf_conj_elim], level_provers=N
 
 
 
-def generate_proof(formula):
-  return generate_proof_helper(formula, "")
+def generate_proof(formula, base):
+  return generate_proof_helper(formula, base, "")
 
 
 
-def generate_proof_helper(formula, sep):
+def generate_proof_helper(formula, base, sep):
 
   if(formula.justification.isgiven):
     return sep + "GIVEN: " + str(formula) + "\n"
@@ -69,8 +69,16 @@ def generate_proof_helper(formula, sep):
     # If proved using ShadowProver...
     if(formula.justification.proved_via_sp):
       out += sep + "Proved via ShadowProver:\n"
-      proof = sep + SPINDENT + formula.justification.rule.replace("\n", "\n"+sep+SPINDENT) # Format SP output
-      out += proof + "\n"
+      out += sep + SPINDENT + formula.justification.rule.replace("\n", "\n"+sep+SPINDENT) + "\n" # Format SP output
+
+      # "Hacky" way to trace which assumptions ShadowProver used which may not
+      # have been givens (i.e. they were proved by a combination of ShadowAdjudicator
+      # rules and previous calls to ShadowProver)
+      sep += INDENT
+      sp_out_sanitized = " ".join(formula.justification.rule.split())
+      for f in base:
+        if(str(f) in sp_out_sanitized):              # If a formula in the base appears in the ShadowProver output
+          out += generate_proof_helper(f, base, sep) # generate a proof of it
       return out
 
     # If proved using ShadowAdjudicator...
@@ -78,12 +86,12 @@ def generate_proof_helper(formula, sep):
 
     sep += INDENT                                   # Increase indent
 
-    if(isinstance(justifier, Formula)):             # If justification is a single formula
-      out += generate_proof_helper(justifier, sep)  # Recursively output its justification
+    if(isinstance(justifier, Formula)):                   # If justification is a single formula
+      out += generate_proof_helper(justifier, base, sep)  # Recursively output its justification
 
     else:                                     # If it's a list of formulae
       for f in formula.justification.formula: # Recursively output justifications of each formula       
-        out += generate_proof_helper(f, sep)
+        out += generate_proof_helper(f, base, sep)
 
     return out
 

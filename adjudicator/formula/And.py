@@ -1,12 +1,30 @@
 from .Proposition import Proposition
 
-# fstring       -- String        -- Original input string
-# justification -- Justification -- Links the formula to its justification
-# args          -- List(Formula) -- Sub-formulae (arguments to proposition)
+# fstring       -- String                -- String representation of formula (in s-expression style)
+# justification -- Justification || None -- Links the formula to its justification
+# args          -- List(Formula)         -- Sub-formulae (conjuncts)
 class And(Proposition):
 
-  def __init__(self, fstring, justification):
-    super().__init__(fstring, justification)
+  def __init__(self, fstring, justification, args):
+    super().__init__(fstring, justification, args)
+
+
+
+  @classmethod
+  def from_string(cls, fstring, justification=None):
+    return super().from_string(fstring, justification)
+
+
+
+  @classmethod
+  def from_args(cls, conjuncts, justification=None):
+    fstring = "(and "
+
+    for c in conjuncts:
+      fstring += str(c) + " "
+    fstring = fstring[:-1] + ")" # Removes trailing space
+
+    return cls(fstring, justification, conjuncts)
 
 
 
@@ -23,11 +41,3 @@ class And(Proposition):
   def __hash__(self):
     return super().__hash__()
 
-### END CLASS DEFINITION ###
-
-# Returns a new And object from arguments
-# agent & time are strings
-# formula is of type Formula (NOT a string)
-# justification is a Justification object
-def makeAnd(f1, f2, justification):
-  return And("(and " + str(f1) + " " + str(f2) + ")", justification)

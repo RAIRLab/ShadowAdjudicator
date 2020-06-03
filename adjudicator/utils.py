@@ -15,6 +15,7 @@ def add_to_base(base, formula):
 # Returns a list of String representations of
 # the formulae in base in which any SFBeliefs
 # have had their annotations removed
+# TODO This function doesn't handle SFBeliefs as sub-formulae
 def remove_annotations(base):
 
   from formula.SFBelief import SFBelief
@@ -31,6 +32,7 @@ def remove_annotations(base):
 # Returns a list of String representations of
 # the formulae in base in which any SFBeliefs
 # have been removed
+# TODO This function doesn't handle SFBeliefs as sub-formulae
 def remove_sf_beliefs(base):
 
   from formula.SFBelief import SFBelief

@@ -5,7 +5,7 @@ from .Modal import Modal
 # agent         -- String
 # time          -- String
 # formula       -- Formula               -- Sub-formula (object of modal operator)
-class Says(Modal):
+class Perception(Modal):
 
   def __init__(self, fstring, justification, agent, time, formula):
     super().__init__(fstring, justification, agent, time, formula)
@@ -20,7 +20,7 @@ class Says(Modal):
 
   @classmethod
   def from_args(cls, agent, time, formula, justification=None):
-    fstring = "(Says! " + agent + " " + time + " " + str(formula) + ")"
+    fstring = "(Perceives! " + agent + " " + time + " " + str(formula) + ")"
     return cls(fstring, justification, agent, time, formula)
 
 

@@ -1,8 +1,9 @@
+from .Formula import Formula
 
 # isgiven       -- Boolean                          -- True if formula is assumed, false otherwise
-# proved_via_sp -- Booelan                          -- True if formula was proved using ShadowProver
-# formula       -- List(Formula) || Formula || None -- Formula(e) used in proof (i.e. input to rule)
-# rule          -- String                   || None -- Inference rule used. If proved_via_sp=True, this contains the ShadowProver output
+# proved_via_sp -- Boolean                          -- True if formula was proved using ShadowProver
+# formula       -- List(Formula) || Formula || None -- Formula(e) used in proof (i.e. input to rule). None if proved_via_sp == True
+# rule          -- String                   || None -- Inference rule used. If proved_via_sp == True, this contains the ShadowProver output
 class Justification:
 
   # Last two parameters are None if (isgiven == True)
@@ -15,7 +16,6 @@ class Justification:
 
 
   def __str__(self):
-    from .Formula import Formula
 
     if self.isgiven: return "GIVEN"
 

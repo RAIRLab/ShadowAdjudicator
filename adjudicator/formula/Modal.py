@@ -1,23 +1,41 @@
-from .Parser  import parse
+from abc import abstractmethod
+
+from .Parser  import parse_fstring
 from .Formula import Formula
 
-# fstring       -- String        -- Original input string
-# justification -- Justification -- Links the formula to its justification
+# fstring       -- String                -- String representation of formula (in s-expression style)
+# justification -- Justification || None -- Links the formula to its justification
 # agent         -- String
 # time          -- String
-# formula       -- Formula       -- Sub-formula (object of modal operator)
+# formula       -- Formula               -- Sub-formula (object of modal operator)
 class Modal(Formula):
 
-  def __init__(self, fstring, justification):
-
+  def __init__(self, fstring, justification, agent, time, formula):
     super().__init__(fstring, justification)
+    self.agent   = agent
+    self.time    = time
+    self.formula = formula
 
+
+
+  @classmethod
+  def from_string(cls, fstring, justification=None):
     # Split off the agent and time, leaving the sub-formula intact
     args = fstring.split(maxsplit=3)
 
-    self.agent = args[1]
-    self.time  = args[2]
-    self.formula = parse(args[3][:-1]) # Pass sub-formulae to parse
+    agent = args[1]
+    time  = args[2]
+    formula = parse_fstring(args[3][:-1]) # Pass sub-formula to parser
+
+    return cls(fstring, justification, agent, time, formula)
+
+
+
+  # Each sub-class will need to define this on its own
+  @classmethod
+  @abstractmethod # TODO No idea if this is allowed...
+  def from_args(cls, args, justification=None):
+    pass
 
 
 

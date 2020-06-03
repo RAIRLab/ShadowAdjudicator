@@ -1,5 +1,5 @@
-from formula.SFBelief      import SFBelief, makeSFBelief
-from formula.And           import And, makeAnd
+from formula.SFBelief      import SFBelief
+from formula.And           import And
 from formula.Justification import Justification
 from utils                 import add_to_base
 
@@ -21,7 +21,7 @@ def sf_conj_elim(base):
         jus      = Justification(isgiven=False, formula=formula, rule="Conjunction elim through annotated belief")
 
         for conjunct in sub.args:
-          belief = makeSFBelief(strength, formula.agent, formula.time, conjunct, jus)
+          belief = SFBelief.from_args(formula.agent, formula.time, conjunct, strength, jus)
           if(add_to_base(base, belief)): modifiedBase = True
 
   return modifiedBase

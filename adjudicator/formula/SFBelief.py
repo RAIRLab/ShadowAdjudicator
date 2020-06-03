@@ -1,24 +1,45 @@
+from .Parser import parse_fstring
 from .Belief import Belief
 
-# fstring        -- String        -- Original input string (e.g. (Believes!4 alice now phi))
-# fstring_no_ann -- String        -- String form with no strength factor 
-# justification  -- Justification -- Links the formula to its justification
-# agent         -- String
-# time          -- String
-# formula       -- Formula       -- Sub-formula (object of modal operator)
+# fstring        -- String                -- String representation of formula (in s-expression style) (e.g. (Believes!4 alice now phi))
+# fstring_no_ann -- String                -- String form with no strength factor 
+# justification  -- Justification || None -- Links the formula to its justification
+# agent          -- String
+# time           -- String
+# formula        -- Formula               -- Sub-formula (object of modal operator)
 class SFBelief(Belief):
 
-  def __init__(self, fstring, justification):
-    super().__init__(fstring, justification)
+  def __init__(self, fstring, justification, agent, time, formula, strength):
+    super().__init__(fstring, justification, agent, time, formula)
+    self.strength = strength
+    self.fstring_no_ann = fstring[:10] + fstring[11:]
+
+
+
+  @classmethod
+  def from_string(cls, fstring, justification=None):
+    # Split off the agent and time, leaving the sub-formula intact
+    args = fstring.split(maxsplit=3)
+
+    agent = args[1]
+    time  = args[2]
+    formula = parse_fstring(args[3][:-1]) # Pass sub-formula to parser
 
     try:
-      self.strength = int(fstring[10])
+      strength = int(fstring[10])
 
     except ValueError:
       print("Improperly formatted SF belief (invalid strength factor)")
-      exit()
+      exit(1)
 
-    self.fstring_no_ann = fstring[:10] + fstring[11:]
+    return cls(fstring, justification, agent, time, formula, strength)
+
+
+
+  @classmethod
+  def from_args(cls, agent, time, formula, strength, justification=None):
+    fstring = "(Believes!" + str(strength) + " " + agent + " " + time + " " + str(formula) + ")"
+    return cls(fstring, justification, agent, time, formula, strength)
 
 
 
@@ -35,13 +56,3 @@ class SFBelief(Belief):
   def __hash__(self):
     return super().__hash__()
 
-
-
-### END CLASS DEFINITION ###
-
-# Returns a new SFBelief object from arguments
-# agent & time are strings
-# formula is of type Formula (NOT a string)
-# justification is a Justification object
-def makeSFBelief(strength, agent, time, formula, justification):
-  return SFBelief("(Believes!" + str(strength) + " " + agent + " " + time + " " + str(formula) + ")", justification)

@@ -1,21 +1,40 @@
-from .Parser  import parse, parse_sexpr
+from abc import abstractmethod
+
+from .Parser  import parse_fstring, parse_sexpr
 from .Formula import Formula
 
-# fstring       -- String        -- Original input string
-# justification -- Justification -- Links the formula to its justification
-# args          -- List(Formula) -- Sub-formulae (arguments to proposition)
+# fstring       -- String                -- String representation of formula (in s-expression style)
+# justification -- Justification || None -- Links the formula to its justification
+# args          -- List(Formula)         -- Sub-formulae (arguments to proposition)
 class Proposition(Formula):
 
-  def __init__(self, fstring, justification):
+  def __init__(self, fstring, justification, args):
     super().__init__(fstring, justification)
+    self.args = args
 
+
+
+  # Parses and recursively instantiates objects for all sub-arguments
+  # Useful for all sub-classes (e.g. and, implies) EXCEPT ATOM
+  @classmethod
+  def from_string(cls, fstring, justification=None):
     args = parse_sexpr(fstring) # Parse s-expression
     args = args[1:]             # Remove proposition type (e.g. "and", "implies")
 
     # Recursively parse sub-formulae
-    self.args = []
+    init_args = []
     for a in args:
-      self.args.append(parse(a))
+      init_args.append(parse_fstring(a))
+
+    return cls(fstring, justification, init_args)
+
+
+
+  # Each sub-class will need to define this on its own
+  @classmethod
+  @abstractmethod # TODO No idea if this is allowed...
+  def from_args(cls, args, justification=None):
+    pass
 
 
 
@@ -31,3 +50,4 @@ class Proposition(Formula):
 
   def __hash__(self):
     return super().__hash__()
+

@@ -1,11 +1,11 @@
 from .Parser  import parse_fstring, parse_sexpr
 from .Formula import Formula
 
-# fstring       -- String                -- String representation of formula (in s-expression style) (e.g. (Happy john))
-# justification -- Justification || None -- Links the formula to its justification
-# name          -- String                -- Name of predicate (e.g. "Happy")
-# args          -- List(Formula)         -- Sub-formulae (arguments to predicate) (e.g. ["john"])
-class Predicate(Formula):
+# fstring       -- String                 -- String representation of formula (in s-expression style) (e.g. (safety a t lga))
+# justification -- Justification || None  -- Links the formula to its justification
+# name          -- String                 -- Name of function (e.g. "safety")
+# args          -- List(Formula)          -- Sub-formulae (arguments to function) (e.g. ["a", "t", "lga"])
+class Function(Formula):
 
   def __init__(self, fstring, justification, name, args):
     super().__init__(fstring, justification)
@@ -18,7 +18,7 @@ class Predicate(Formula):
   def from_string(cls, fstring, justification=None):
     args = parse_sexpr(fstring) # Parse s-expression
     name = args[0]
-    args = args[1:]             # Remove predicate name (e.g. "Happy")
+    args = args[1:]             # Remove function name (e.g. ">")
 
     # Recursively parse sub-formulae
     init_args = []

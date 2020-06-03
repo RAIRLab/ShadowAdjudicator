@@ -1,12 +1,13 @@
-from .Proposition import Proposition
+from .Function import Function
 
 # fstring       -- String                -- String representation of formula (in s-expression style)
 # justification -- Justification || None -- Links the formula to its justification
-# args          -- List(Formula)         -- Sub-formulae (arguments to proposition)
-class Or(Proposition):
+# args          -- List(Formula)         -- Sub-formulae (arguments to greater than function -- should only be 2)
+class Greater(Function):
 
   def __init__(self, fstring, justification, args):
-    super().__init__(fstring, justification, args)
+    assert(len(args) == 2)
+    super().__init__(fstring, justification, ">", args)
 
 
 
@@ -17,14 +18,10 @@ class Or(Proposition):
 
 
   @classmethod
-  def from_args(cls, disjuncts, justification=None):
-    fstring = "(or "
-
-    for d in disjuncts:
-      fstring += str(d) + " "
-    fstring = fstring[:-1] + ")" # Removes trailing space
-
-    return cls(fstring, justification, disjuncts)
+  def from_args(cls, arg1, arg2, justification=None):
+    fstring = "(> " + str(arg1) + " " + str(arg2) + ")"
+    args = [arg1, arg2]
+    return cls(fstring, justification, args)
 
 
 

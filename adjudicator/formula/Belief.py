@@ -1,14 +1,27 @@
 from .Modal import Modal
 
-# fstring       -- String        -- Original input string
-# justification -- Justification -- Links the formula to its justification
+# fstring       -- String                -- String representation of formula (in s-expression style) 
+# justification -- Justification || None -- Links the formula to its justification
 # agent         -- String
 # time          -- String
-# formula       -- Formula       -- Sub-formula (object of modal operator)
+# formula       -- Formula               -- Sub-formula (object of modal operator)
 class Belief(Modal):
 
-  def __init__(self, fstring, justification):
-    super().__init__(fstring, justification)
+  def __init__(self, fstring, justification, agent, time, formula):
+    super().__init__(fstring, justification, agent, time, formula)
+
+
+
+  @classmethod
+  def from_string(cls, fstring, justification=None):
+    return super().from_string(fstring, justification)
+
+
+
+  @classmethod
+  def from_args(cls, agent, time, formula, justification=None):
+    fstring = "(Believes! " + agent + " " + time + " " + str(formula) + ")"
+    return cls(fstring, justification, agent, time, formula)
 
 
 
@@ -25,15 +38,3 @@ class Belief(Modal):
   def __hash__(self):
     return super().__hash__()
 
-
-
-### END CLASS DEFINITION ###
-
-
-
-# Returns a new Belief object from arguments
-# agent & time are strings
-# formula is of type Formula (NOT a string)
-# justification is a Justification object
-def makeBelief(agent, time, formula, justification):
-  return Belief("(Believes! " + agent + " " + time + " " + str(formula) + ")", justification)

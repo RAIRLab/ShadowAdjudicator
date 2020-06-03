@@ -1,32 +1,39 @@
 from .Justification import Justification
 
+# Given a list of fstring, parses each, instantiates them into
+# Formula objects, and returns a new list
 def parse_list(fstrings):
 
   flist = []
   for f in fstrings:
-    flist.append(parse(f))
+    flist.append(parse_fstring(f))
   return flist
 
 
 
-def parse(fstring):
+# Given a fstring, returns an instantiated Formula object
+def parse_fstring(fstring):
+  # Sanitize fstring
+  # (Removes any superfluous spacing which will cause issues during parsing)
+  fstring = " ".join(fstring.split())
 
   if(fstring.startswith("(Believes!")):
     if(fstring[10] == ' '):
       from .Belief import Belief
-      return Belief(fstring, Justification(isgiven=True))
+      return Belief.from_string(fstring, Justification(isgiven=True))
     else:
       from .SFBelief import SFBelief
-      return SFBelief(fstring, Justification(isgiven=True))
+      return SFBelief.from_string(fstring, Justification(isgiven=True))
 
   elif(fstring.startswith("(Perceives!")):
-    from .Perceives import Perceives
-    return Perceives(fstring, Justification(isgiven=True))
+    from .Perception import Perception
+    return Perception.from_string(fstring, Justification(isgiven=True))
 
   elif(fstring.startswith("(Says!")):
     from .Says import Says
-    return Says(fstring, Justification(isgiven=True))
+    return Says.from_string(fstring, Justification(isgiven=True))
 
+  # TODO Not implemented yet...
   #elif(fstring.startswith("(Knows!"):
   #  return Knowledge(fstring)
 
@@ -44,32 +51,43 @@ def parse(fstring):
 
   elif(fstring.startswith("(not")):
     from .Not import Not
-    return Not(fstring, Justification(isgiven=True))
+    return Not.from_string(fstring, Justification(isgiven=True))
 
   elif(fstring.startswith("(and")):
     from .And import And
-    return And(fstring, Justification(isgiven=True))
+    return And.from_string(fstring, Justification(isgiven=True))
 
   elif(fstring.startswith("(or")):
     from .Or import Or
-    return Or(fstring, Justification(isgiven=True))
+    return Or.from_string(fstring, Justification(isgiven=True))
 
   elif(fstring.startswith("(implies")):
     from .Implication import Implication
-    return Implication(fstring, Justification(isgiven=True))
+    return Implication.from_string(fstring, Justification(isgiven=True))
 
   elif(fstring.startswith("(iff")):
     from .BiConditional import BiConditional
-    return BiConditional(fstring, Justification(isgiven=True))
+    return BiConditional.from_string(fstring, Justification(isgiven=True))
 
-  elif(fstring.startswith("(")):
+  elif(fstring.startswith("(>")):
+    from .Greater import Greater
+    return Greater.from_string(fstring, Justification(isgiven=True))
+
+  elif(fstring.startswith("(") and fstring[1].isupper()):
     from .Predicate import Predicate
-    return Predicate(fstring, Justification(isgiven=True))
+    return Predicate.from_string(fstring, Justification(isgiven=True))
 
-  # A propositional atom (or unimplemented formula types)
+  elif(fstring.startswith("(") and fstring[1].islower()):
+    from .Function import Function
+    return Function.from_string(fstring, Justification(isgiven=True))
+
+  elif(fstring[0].isalpha()):
+    from .Atom import Atom
+    return Atom.from_string(fstring, Justification(isgiven=True))
+
   else:
-    from .Formula import Formula
-    return Formula(fstring, Justification(isgiven=True))
+    print("ERROR: Improperly formatted fstring: " + fstring)
+    exit(1)
 
 
 # formula -- String
@@ -88,7 +106,17 @@ def parse_sexpr(formula):
     c = formula[end]
     begin_search = end + 1
 
-    if(c == ' ' and depth == 0):
+    section = formula[begin_atom:end] # Potential sub s-expr to parse out
+    n = len(section)
+
+    # This case ensures that we catch non-parenthesized sub s-expr's
+    # (e.g. propositional atoms, "and" in the example above
+    #
+    # If the current character is a space and depth == 0, we may want to
+    # end the current sub-string and make it a sub s-expr. HOWEVER, when
+    # there is extra space in the string, this will give each space its
+    # own sub s-expr. The final two conditons prevent this.
+    if(c == ' ' and depth == 0 and n > 0 and (not section == n*" ")):
         out.append(formula[begin_atom:end])
         begin_atom = end + 1
 
