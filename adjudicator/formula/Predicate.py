@@ -1,6 +1,8 @@
 from .Parser  import parse_fstring, parse_sexpr
 from .Formula import Formula
 
+modalities = ["Perceives", "Believes", "Knows", "Says", "Intends", "Desires", "Ought"]
+
 # fstring       -- String                -- String representation of formula (in s-expression style) (e.g. (Happy john))
 # justification -- Justification || None -- Links the formula to its justification
 # name          -- String                -- Name of predicate (e.g. "Happy")
@@ -8,6 +10,11 @@ from .Formula import Formula
 class Predicate(Formula):
 
   def __init__(self, fstring, justification, name, args):
+
+    # Catch modal operators accidentally entered as predicates
+    if(name in modalities):
+      print("I think you're missing a '!' after '" + name + "'.")
+
     super().__init__(fstring, justification)
     self.name = name
     self.args = args
