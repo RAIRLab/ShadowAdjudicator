@@ -30,7 +30,7 @@ def r_conj_intro(base):
            not formula.args[3] == f.args[3]):
 
           # Deduce a Reasonablenes predicate where the right sub-formula is the conjunction of the two inputs
-          jus = Justification(isgiven=False, formula=[formula, f], rule="Reasonableness Conjunction Intro")
+          jus = Justification(isgiven=False, formula=[formula, f], schema="Reasonableness Conjunction Intro")
           formula = Predicate.from_args("R", [f.args[0], f.args[1], f.args[2], And.from_args([formula.args[3], f.args[3]])], jus)
 
           if(add_to_base(base, formula)): modifiedBase = True

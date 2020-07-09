@@ -1,4 +1,4 @@
-# Demo of multiple applications of SF Modus Ponens inference rule
+# Demo of multiple applications of SF Modus Ponens inference schema
 
 from formula.Parser import parse_list, parse_fstring
 from Prove          import prove

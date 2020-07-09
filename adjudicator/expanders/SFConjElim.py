@@ -18,7 +18,7 @@ def sf_conj_elim(base):
 
       if(isinstance(sub, And)):
         strength = formula.strength
-        jus      = Justification(isgiven=False, formula=formula, rule="Conjunction elim through annotated belief")
+        jus      = Justification(isgiven=False, formula=formula, schema="Conjunction elim through annotated belief")
 
         for conjunct in sub.args:
           belief = SFBelief.from_args(formula.agent, formula.time, conjunct, strength, jus)

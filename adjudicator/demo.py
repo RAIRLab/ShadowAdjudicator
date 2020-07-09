@@ -1,4 +1,4 @@
-# Demo for running Strength Factor inference rules
+# Demo for running Strength Factor inference schemata
 
 from formula.Parser          import parse_list, parse_fstring
 from Prove                   import prove

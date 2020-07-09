@@ -61,7 +61,9 @@ def inconsistent(base):
     elif isinstance(f, Belief): new_base.append(str(f.formula))
     else:                       new_base.append(f.fstring)
 
+  print("Calling ShadowProver...")
   consistency_check = interface.prove(new_base, "zeta")
+  print("ShadowProver Done.")
 
   if(consistency_check == "FAILED"): return False
   else:                              return True

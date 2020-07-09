@@ -1,4 +1,4 @@
-# Demo of a proof requiring both SF Modus Ponens and SF Conj Elim rules
+# Demo of a proof requiring both SF Modus Ponens and SF Conj Elim schemas
 
 from formula.Parser import parse_list, parse_fstring
 from Prove          import prove

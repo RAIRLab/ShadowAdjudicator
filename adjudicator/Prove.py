@@ -46,6 +46,9 @@ def prove(base, goal, expanders=[sf_modus_ponens, sf_conj_elim], level_provers=N
 
 
 
+# Returns a string containing an argument justifying "formula"
+# The helper function recursively traces justifications of supporting
+# formulae in "base"
 def generate_proof(formula, base):
   return generate_proof_helper(formula, base, "", [])
 
@@ -57,44 +60,45 @@ def generate_proof_helper(formula, base, sep, already_added):
 
   if(formula in already_added): return ""
 
-  if(formula.justification.isgiven):
-    return sep + "GIVEN: " + str(formula) + "\n"
+  # Ensures that any subsequent recursive calls to the proof helper won't
+  # attemmpt to prove the formula we're currently proving (causing an infinite
+  # loop)
+  already_added.append(formula) 
 
-  else:
-    out = sep + "PROOF OF: " + str(formula) + "\n"
+  out  = sep + "PROOF OF: " + str(formula) + "\n"
+  out += formula.justification.string_with_indent(sep)
 
-    justifier = formula.justification.formula # Formula(e) which justify formula
+  # If formula is given, we're done
+  if(formula.justification.isgiven): return out
 
-    # If proved using ShadowProver...
-    if(formula.justification.proved_via_sp):
-      out += sep + "Proved via ShadowProver:\n"
-      out += sep + SPINDENT + formula.justification.rule.replace("\n", "\n"+sep+SPINDENT) + "\n" # Format SP output
+  justifier = formula.justification.formula # Formula(e) which justify formula
+  sep      += INDENT                        # Increase indent
 
-      # "Hacky" way to trace which assumptions ShadowProver used which may not
-      # have been givens (i.e. they were proved by a combination of ShadowAdjudicator
-      # rules and previous calls to ShadowProver)
-      sep += INDENT
-      sp_out_sanitized = " ".join(formula.justification.rule.split())
-      for f in base:                                                # If a formula in the base (which is not
-        if(str(f) in sp_out_sanitized and not f == formula):        # the one currently being proven -- think
-          out += generate_proof_helper(f, base, sep, already_added) # infinite loop) appears in the ShadowProver
-          already_added.append(f)                                   # output, include it's justification
-      return out 
+  # If proved (in part or in whole) using ShadowProver, it won't be obvious which formulae in the
+  # base ShadowProver needed to construct its proof
+  # While not perfect, this is a "hacky" (but currently, the most easily implemented) way to trace
+  # which assumptions ShadowProver used. That is, we see which formulae are contained in SP's output
+  if not formula.justification.sp_output == None:
+    sp_out_sanitized = " ".join(formula.justification.sp_output.split()) # Squish any extra spaces
 
-    # If proved using ShadowAdjudicator...
-    else: out += sep + formula.get_justification() + "\n"
+    for f in base:                                                # If a formula in the base (which is not
+      if(str(f) in sp_out_sanitized and not f == formula):        # the one currently being proven -- think
+        out += generate_proof_helper(f, base, sep, already_added) # infinite loop) appears in the ShadowProver
+        already_added.append(f)                                   # output, include it's justification
 
-    sep += INDENT                                   # Increase indent
+  # If no justifying formula(e), we're done
+  # (Possible reasons -- used ShadowProver (and hence can't track which formuale were used)
+  #                   -- used a schema which requires no formulae to invoke)
+  if justifier == None: return out
 
-    if(isinstance(justifier, Formula)):                                  # If justification is a single formula
-      out += generate_proof_helper(justifier, base, sep, already_added)  # Recursively output its justification
+  if(isinstance(justifier, Formula)):                                  # If justification is a single formula
+    out += generate_proof_helper(justifier, base, sep, already_added)  # Recursively output its justification
+
+  else:                                                                # If it's a list of formulae
+    for f in justifier:                                                # Recursively output justifications of each formula       
+      out += generate_proof_helper(f, base, sep, already_added)
       already_added.append(justifier)
 
-    else:                                     # If it's a list of formulae
-      for f in formula.justification.formula: # Recursively output justifications of each formula       
-        out += generate_proof_helper(f, base, sep, already_added)
-        already_added.append(justifier)
-
-    return out
+  return out
 
 
