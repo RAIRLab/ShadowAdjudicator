@@ -33,20 +33,20 @@ def parse_fstring(fstring):
     from .Says import Says
     return Says.from_string(fstring, Justification(isgiven=True))
 
-  # TODO Not implemented yet...
-  #elif(fstring.startswith("(Knows!"):
-  #  return Knowledge(fstring)
+  elif(fstring.startswith("(Knows!")):
+    return Knowledge(fstring)
 
-  #elif(fstring.startswith("(Common!"):
+  elif(fstring.startswith("(Ought!")):
+    return Obligation(fstring)
+
+  # TODO Not implemented yet...
+  #elif(fstring.startswith("(Common!")):
   #  return Common(fstring)
 
-  #elif(fstring.startswith("(Ought!"):
-  #  return Ought(fstring)
-
-  #elif(fstring.startswith("(Intends!"):
+  #elif(fstring.startswith("(Intends!")):
   #  return Intends(fstring)
 
-  #elif(fstring.startswith("(Desires!"):
+  #elif(fstring.startswith("(Desires!")):
   #  return Desires(fstring)
 
   elif(fstring.startswith("(not")):

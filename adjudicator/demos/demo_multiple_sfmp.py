@@ -1,7 +1,11 @@
 # Demo of multiple applications of SF Modus Ponens inference schema
 
-from formula.Parser import parse_list, parse_fstring
-from Prove          import prove
+try:
+  from formula.Parser import parse_list, parse_fstring
+  from Prove          import prove
+except ModuleNotFoundError:
+  print("Demos must be run from the base directory, NOT the 'demos' directory.")
+  exit(1)
 
 if __name__ == "__main__":
 
