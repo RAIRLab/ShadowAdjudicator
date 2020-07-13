@@ -2,7 +2,7 @@
 
 try:
   from formula.Parser import parse_list, parse_fstring
-  from Prove          import prove
+  from argument_constructor    import construct_argument
 except ModuleNotFoundError:
   print("Demos must be run from the base directory, NOT the 'demos' directory.")
   exit(1)
