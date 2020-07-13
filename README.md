@@ -1,5 +1,7 @@
 # ShadowAdjudicator
-A system for adjudicating arguments amongst two or more AI agents reasoning in the Inductive Deontic Cognitive Event Calculus (IDCEC) (essentially, a quantified modal logic -- see [this paper](https://easychair.org/publications/paper/Vtl4) for more information).
+A framework for adjudicating arguments amongst AI agents which reason using the Inductive Deontic Cognitive Event Calculus (IDCEC).
+
+See Appendix A of [this paper](https://easychair.org/publications/paper/NzWG) for an introduction to cognitive calculi in general, and Appendix B for a description of the Deontic Cognitive Event Calculus (DCEC). For some early work on the IDCEC, see [this paper](https://easychair.org/publications/paper/Vtl4).
 
 ## Description
 
