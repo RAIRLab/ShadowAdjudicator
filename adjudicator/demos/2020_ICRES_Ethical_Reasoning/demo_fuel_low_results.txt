@@ -1,0 +1,66 @@
+(base) root@df267ad26288:/base# python demos/2020_ICRES_Ethical_Reasoning/demo_fuel_low.py 
+Proof found in 3.6140055656433105 seconds.
+PROOF OF: (Knows! ua now (Ought! ua now crisis (happens (action ua (Land emptyroad)) now)))
+(class com.naveensundarg.shadow.prover.representations.formula.Knowledge
+ [(:FOLFromSnark
+ Givens:
+((implies (and (LessUnethical emptyroad fieldwithpowerlines) (LessUnethical emptyroad fieldwithpeople) ) (BestOption emptyroad))
+
+((LessUnethical emptyroad fieldwithpowerlines)
+    (GIVEN[]))
+
+((LessUnethical emptyroad fieldwithpeople)
+    (GIVEN[]))
+(implies (BestOption emptyroad) |_Ought!_ua_now_crisis__happens__action__ua__Land__emptyroad___now__|)) 
+ Goals:
+|_Ought!_ua_now_crisis__happens__action__ua__Land__emptyroad___now__|)])
+Proof found in 0.9523768424987793 seconds.
+PROOF OF: (happens (action ua (Land emptyroad)) now)
+(AssumptionsNowContainsGoal
+ Givens:
+((Ought! ua now crisis (happens (action  ua (Land  emptyroad)) now))
+
+((Knows! ua now (Ought! ua now crisis (happens (action  ua (Land  emptyroad)) now)))
+    (GIVEN[]))
+
+((Believes! ua now (Ought! ua now crisis (happens (action  ua (Land  emptyroad)) now)))
+    InferenceJustification{base=[(Knows! ua now (Ought! ua now crisis (happens (action  ua (Land  emptyroad)) now)))], message='DR5'})
+(happens (action  ua (Land  emptyroad)) now)
+(Intends! ua now (happens (action  ua (Land  emptyroad)) now))
+
+((Believes! ua now crisis)
+    (GIVEN[]))
+
+((implies (and (LessUnethical emptyroad fieldwithpowerlines) (LessUnethical emptyroad fieldwithpeople) ) (BestOption emptyroad))
+    (GIVEN[]))
+
+((Knows! ua now (LessUnethical emptyroad fieldwithpowerlines))
+    (GIVEN[]))
+
+((Knows! ua now (implies (and (LessUnethical emptyroad fieldwithpowerlines) (LessUnethical emptyroad fieldwithpeople) ) (BestOption emptyroad)))
+    (GIVEN[]))
+
+((Believes! ua now (LessUnethical emptyroad fieldwithpowerlines))
+    InferenceJustification{base=[(Knows! ua now (LessUnethical emptyroad fieldwithpowerlines))], message='DR5'})
+
+((Believes! ua now (implies (and (LessUnethical emptyroad fieldwithpowerlines) (LessUnethical emptyroad fieldwithpeople) ) (BestOption emptyroad)))
+    InferenceJustification{base=[(Knows! ua now (implies (and (LessUnethical emptyroad fieldwithpowerlines) (LessUnethical emptyroad fieldwithpeople) ) (BestOption emptyroad)))], message='DR5'})
+
+((LessUnethical emptyroad fieldwithpowerlines)
+    (GIVEN[]))
+
+((Knows! ua now (LessUnethical emptyroad fieldwithpeople))
+    (GIVEN[]))
+
+((LessUnethical emptyroad fieldwithpeople)
+    (GIVEN[]))
+
+((Believes! ua now (LessUnethical emptyroad fieldwithpeople))
+    InferenceJustification{base=[(Knows! ua now (LessUnethical emptyroad fieldwithpeople))], message='DR5'})
+
+((forall (?option) (Knows! ua now (implies (BestOption ?option) (Ought! ua now crisis (happens (action  ua (Land  ?option)) now)))))
+    (GIVEN[]))
+(Knows! ua now (implies (BestOption emptyroad) (Ought! ua now crisis (happens (action  ua (Land  emptyroad)) now))))) 
+ Goals:
+(happens (action  ua (Land  emptyroad)) now))
+

@@ -1,4 +1,12 @@
+from formula.SFBelief import SFBelief
+from formula.Belief   import Belief
 
+from time import time
+
+# ShadowProver interface
+import sys
+sys.path.insert(1, '/pylibs/interface')
+import interface
 
 # base    -- List(Formula)
 # formula -- Formula
@@ -17,9 +25,6 @@ def add_to_base(base, formula):
 # have had their annotations removed
 # TODO This function doesn't handle SFBeliefs as sub-formulae
 def remove_annotations(base):
-
-  from formula.SFBelief import SFBelief
-
   out = []
   for f in base:
     if isinstance(f, SFBelief): out.append(f.fstring_no_ann)
@@ -34,9 +39,6 @@ def remove_annotations(base):
 # have been removed
 # TODO This function doesn't handle SFBeliefs as sub-formulae
 def remove_sf_beliefs(base):
-
-  from formula.SFBelief import SFBelief
-
   return [str(f) for f in list(filter(lambda x : not isinstance(x, SFBelief), base))]
 
 
@@ -46,15 +48,6 @@ def remove_sf_beliefs(base):
 # to prove zeta, a reserved symbol (hence, only provable if the base
 # is inconsistent)
 def inconsistent(base):
-  
-  from formula.SFBelief import SFBelief
-  from formula.Belief   import Belief
-
-  # ShadowProver interface
-  import sys
-  sys.path.insert(1, '/pylibs/interface')
-  import interface
-
   new_base = []
   for f in base:
     if isinstance(f, SFBelief): new_base.append(str(f.formula))
@@ -67,4 +60,27 @@ def inconsistent(base):
 
   if(consistency_check == "FAILED"): return False
   else:                              return True
+
+
+
+# assumptions -- List(String)
+# goal        -- String
+#
+# Runs ShadowProver on the input and prints a String containing the output as well as timing
+# Returns True if ShadowProver found a proof
+#
+def sp_time_test(assumptions, goal):
+  start = time()
+  out   = interface.prove(assumptions, goal)
+  stop  = time()
+  elapsed = stop - start
+
+  if(out != "FAILED"):
+    print("Proof found in " + str(elapsed) + " seconds.")
+    print("PROOF OF: " + goal)
+    print(out)
+    return True
+
+  print("Failed to find a proof in " + str(elapsed) + " seconds.")
+  return False
 

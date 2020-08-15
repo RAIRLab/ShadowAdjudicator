@@ -43,6 +43,11 @@ class SFBelief(Belief):
 
 
 
+  def is_annotated(self):
+    return True
+
+
+
   def __str__(self):
     return super().__str__()
 

@@ -1,11 +1,11 @@
 from .Modal import Modal
 
-# fstring       -- String                -- String representation of formula (in s-expression style)
+# fstring       -- String                -- String representation of formula (in s-expression style) 
 # justification -- Justification || None -- Links the formula to its justification
 # agent         -- String
 # time          -- String
 # formula       -- Formula               -- Sub-formula (object of modal operator)
-class Knowledge(Modal):
+class Withhold(Modal):
 
   def __init__(self, fstring, justification, agent, time, formula):
     super().__init__(fstring, justification, agent, time, formula)
@@ -20,7 +20,7 @@ class Knowledge(Modal):
 
   @classmethod
   def from_args(cls, agent, time, formula, justification=None):
-    fstring = "(Knows! " + agent + " " + time + " " + str(formula) + ")"
+    fstring = "(Withholds! " + agent + " " + time + " " + str(formula) + ")"
     return cls(fstring, justification, agent, time, formula)
 
 

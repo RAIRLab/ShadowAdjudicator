@@ -1,12 +1,13 @@
 # Functions for generating arguments
 # (Both finding arguments and constructing String forms of them)
 
-from formula.Formula         import Formula
-from formula.SFBelief        import SFBelief
-from formula.Justification   import Justification
-from expanders.SFModusPonens import sf_modus_ponens
-from expanders.SFConjElim    import sf_conj_elim
-from utils                   import add_to_base, remove_annotations, remove_sf_beliefs, inconsistent
+from formula.Formula                  import Formula
+from formula.SFBelief                 import SFBelief
+from formula.Justification            import Justification
+from expanders.SFModusPonens          import sf_modus_ponens
+from expanders.SFConjElim             import sf_conj_elim
+from constructors.ProvableFromBeliefs import argue_via_beliefs
+from utils                            import add_to_base, remove_annotations, remove_sf_beliefs, inconsistent
 
 # ShadowProver interface
 import sys
@@ -16,19 +17,47 @@ import interface
 INDENT   = "  "  # Amount of indent for sub-parts of arguments
 SPINDENT = "-->" # Indent to indicate ShadowProver portion of argument
 
-# base                   -- List(Formula)
-# goal                   -- Formula
-# expanders              -- List(Function Handle)
-# level_arg_constructors -- List(Function Handle) || None
+DEFAULT_EXPANDERS    = [sf_modus_ponens, sf_conj_elim]
+DEFAULT_CONSTRUCTORS = [argue_via_beliefs]
+
+# base         -- List(Formula)
+# goal         -- Formula
+# expanders    -- List(Function Handle)
+# constructors -- List(Function Handle) || None
+#
+# This is the main function that should be used to call ShadowAdjudicator
+# Its functionality parallels the prove function in ShadowProver
+# It attempts to construct an argument for goal using the formulae in base
+#
+# Returns a String argument on success, "FAILED" otherwise
+def solve(base, goal, expanders=DEFAULT_EXPANDERS, constructors=DEFAULT_CONSTRUCTORS):
+  found = construct_argument(base, goal, expanders, constructors)
+  if(found == None):
+    return "FAILED"
+  else:
+    return generate_argument_string(found, base)
+
+
+# base         -- List(Formula)
+# goal         -- Formula
+# expanders    -- List(Function Handle)
+# constructors -- List(Function Handle) || None
 #
 # Attempts to construct an argument for the goal given the list of assumptions in base.
 #
-# The functions in expanders attempt to apply annotated modal inference schemata to the formulae in base
-# The functions in level_arg_constructors attempt to apply the definition of a Strength Factors level to
-# the goal. The specific definitions depends on the specification of Strength Factors that are used.
-# Several have been specified in various papers, and a subset of those have been implemented.
+# The functions in expanders attempt to apply annotated modal inference schemata to the formulae in base.
+# They are such that they don't need to know the goal. They can simply "expand" the base if they find formulae
+# upon which an inference schema can be applied. (See adjudicator/expanders for these functions).
 #
-def construct_argument(base, goal, expanders=[sf_modus_ponens, sf_conj_elim], level_arg_constructors=None):
+# The functions in constructors attempt to apply either an annotated modal inference scehma or the definition
+# of a Strength Factors level to the goal. The specific definitions depends on the specification of Strength
+# Factors that are used. Several have been specified in various papers, and a subset of those have been implemented.
+# (See adjudicator/constructors).
+#
+# The set of expanders and constructors are passed to the constructors in case they need to recursively call this
+# function (e.g. to construct a sub-argument)
+#
+def construct_argument(base, goal, expanders, constructors):
 
   progress = True
 
@@ -36,24 +65,81 @@ def construct_argument(base, goal, expanders=[sf_modus_ponens, sf_conj_elim], le
 
     # An argument for the goal has been constructed -- return argument
     if(goal in base):
-      goal_found = base[base.index(goal)] # Find goal_formula in base
-      return generate_argument_string(goal_found, base)
+      goal_found = base[base.index(goal)] # Find goal_formula in base (which will contain the justification)
+      return goal_found
 
     progress = False
 
-    # Try all level definitions, if given
-    if(not level_arg_constructors == None):
-      for level in level_arg_constructors:
-        if(level(base, goal)): progress = True
+    # NOTE
+    # It isn't obvious that it is optimal to try the expanders before the constructors
+    # However, in some cases this will provide more specific arguments.
+    # For example, if an argument can be constructed by sf_modus_ponens, it
+    # could also be solved using argue_via_beliefs. However, the former will
+    # give a more precise justification than the latter, and calling the expanders
+    # first will ensure that sf_modus_ponens is the justifying schema which sanctions
+    # adding the goal to the base (then, when argue_via_beliefs attempts to add it,
+    # it will fail). 
 
     # Try all expanders
     for expand in expanders:
       if(expand(base)): progress = True
 
+    # Try all constructors, if given
+    if(not constructors == None):
+      for constructor in constructors:
+        if(constructor(base, goal, expanders, constructors)): progress = True
 
-  # If all level definitions & expanders
+
+
+  # If all constructors & expanders
   # failed to return any new formulae, we're done
-  return "FAILED"
+  return None
+
+
+
+# base       -- List(Formula)
+# goal       -- Formula       (but NOT annotated -- must be acceptable by ShadowProver) 
+# 
+# Function calls ShadowProver, attempting to prove the goal
+# It first tries casting any annotated beliefs down to standard beliefs
+# If this generates an inconsistency, it removes annotated beliefs entirely
+# and calls ShadowProver again.
+# It returns ShadowProver's output, either a proof or "FAILED"
+# 
+# TODO
+# Note that there are cases where the full annotated belief set, with annotations removed,
+# is inconsistent, but that a proof could be found with some subset of the annotated belief set.
+# Currently such a proof wouldn't be found; achieving this would require more sophisticated
+# proof techniques.
+#
+def prove_via_shadowprover(base, goal):
+
+  # remove_annotations has no effect on base if no SFBeliefs; but it does
+  # still perform the conversion to strings for input to ShadowProver
+  sp_base = remove_annotations(base)
+  sp_goal = str(goal)
+
+  print("Calling ShadowProver...", flush=True)
+  out = interface.prove(sp_base, sp_goal)
+  print("ShadowProver Done.", flush=True)
+
+  if(not out=="FAILED"):
+
+    # Only need to check for inconsistency if there are SFBeliefs in the base
+    need_consist_check = any(isinstance(f, SFBelief) for f in base)
+
+    # If the assumption base contains inconsistent beliefs...
+    if(need_consist_check and inconsistent(base)):
+
+      # As with remove_annotations, remove_sf_beliefs
+      # also performs the conversion to strings for ShadowProver
+      sp_base = remove_sf_beliefs(base)
+
+      print("Calling ShadowProver...", flush=True)
+      out = interface.prove(sp_base, sp_goal) # And try again
+      print("ShadowProver Done.", flush=True)
+
+  return out
 
 
 
@@ -76,31 +162,9 @@ def construct_argument(base, goal, expanders=[sf_modus_ponens, sf_conj_elim], le
 #
 def level_arg_constructor(base, goal, definition, def_name, full_def=None, subs=None):
 
-  # remove_annotations has no effect on base if no SFBeliefs; but it does
-  # still perform the conversion to strings for input to ShadowProver
-  sp_base = remove_annotations(base)
-  sp_def  = str(definition)
-
-  print("Calling ShadowProver...", flush=True)
-  out = interface.prove(sp_base, sp_def)
-  print("ShadowProver Done.", flush=True)
+  out = prove_via_shadowprover(base, definition)
 
   if(not out=="FAILED"):
-
-    # Only need to check for inconsistency if there are SFBeliefs in the base
-    need_consist_check = any(isinstance(f, SFBelief) for f in base)
-
-    # If the assumption base contains inconsistent beliefs...
-    if(need_consist_check and inconsistent(base)):
-      sp_base = remove_sf_beliefs(base)       # Remove all SFBeliefs
-      print("Calling ShadowProver...", flush=True)
-      out = interface.prove(sp_base, sp_def)  # And try again
-      print("ShadowProver Done.", flush=True)
-      if(out == "FAILED"): return False       # And if SP can't find a proof, return False
-
-    # If it reaches here, either SP found a proof and the assumption base was consistent,
-    # or it was inconsistent but SP was able to find a proof without contradictory SFBeliefs
-
     if(full_def == None):
       definition.justification = Justification(isgiven=False, sp_output=out)
       goal.justification       = Justification(isgiven=False, formula=definition, schema=def_name)

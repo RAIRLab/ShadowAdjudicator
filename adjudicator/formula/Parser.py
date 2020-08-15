@@ -49,6 +49,14 @@ def parse_fstring(fstring):
   #elif(fstring.startswith("(Desires!")):
   #  return Desires(fstring)
 
+  elif(fstring.startswith("(forall")):
+    from .Universal import Universal
+    return Universal.from_string(fstring, Justification(isgiven=True))
+
+  elif(fstring.startswith("(exists")):
+    from .Existential import Existential
+    return Existential.from_string(fstring, Justification(isgiven=True))
+
   elif(fstring.startswith("(not")):
     from .Not import Not
     return Not.from_string(fstring, Justification(isgiven=True))
@@ -72,6 +80,14 @@ def parse_fstring(fstring):
   elif(fstring.startswith("(>")):
     from .Greater import Greater
     return Greater.from_string(fstring, Justification(isgiven=True))
+
+  elif(fstring.startswith("(=")):
+    from .Equal import Equal
+    return Equal.from_string(fstring, Justification(isgiven=True))
+
+  elif(fstring.startswith("?")):
+    from .Variable import Variable
+    return Variable(fstring)
 
   elif(fstring.startswith("(") and fstring[1].isupper()):
     from .Predicate import Predicate

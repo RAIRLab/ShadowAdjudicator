@@ -45,7 +45,7 @@ class Modal(Formula):
 
 
   def __eq__(self, other):
-    return isinstance(other, Modal) and self.agent == other.agent and self.time == other.time and self.formula == other.formula
+    return isinstance(other, Modal) and type(self) is type(other) and self.agent == other.agent and self.time == other.time and self.formula == other.formula
 
 
 

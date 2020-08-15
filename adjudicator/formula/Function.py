@@ -25,7 +25,11 @@ class Function(Formula):
     for a in args:
       init_args.append(parse_fstring(a))
 
-    return cls(fstring, justification, name, init_args)
+    if(cls == Function):
+      return cls(fstring, justification, name, init_args)
+    # Sub-classes to function should not take a name parameter (they know their own name)
+    else:
+      return cls(fstring, justification, init_args)
 
 
 
@@ -38,6 +42,11 @@ class Function(Formula):
     fstring = fstring[:-1] + ")" # Removes trailing space
 
     return cls(fstring, justification, name, args)
+
+
+
+  def is_annotated(self):
+    return False
 
 
 

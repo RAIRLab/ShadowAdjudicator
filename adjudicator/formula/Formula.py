@@ -33,6 +33,15 @@ class Formula(ABC):
     pass
 
 
+  # Implementations should return True if the formula is annotated
+  # (e.g. a strength-factor-annotated belief, or as in some of our
+  # papers but yet to be implemented as of this writing, SF-annotated
+  # knowledge), False otherwise.
+  @abstractmethod
+  def is_annotated(self):
+    pass
+
+
 
   def get_justification(self):
     if(self.justification == None): return "NO JUSTIFICATION"

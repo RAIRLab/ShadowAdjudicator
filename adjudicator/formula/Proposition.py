@@ -38,6 +38,11 @@ class Proposition(Formula):
 
 
 
+  def is_annotated(self):
+    return False
+
+
+
   def __str__(self):
     return super().__str__()
 

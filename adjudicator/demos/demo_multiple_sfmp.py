@@ -1,8 +1,8 @@
 # Demo of multiple applications of SF Modus Ponens inference schema
 
 try:
-  from formula.Parser import parse_list, parse_fstring
-  from argument_constructor    import construct_argument
+  from formula.Parser       import parse_list, parse_fstring
+  from argument_constructor import solve
 except ModuleNotFoundError:
   print("Demos must be run from the base directory, NOT the 'demos' directory.")
   exit(1)
@@ -20,5 +20,5 @@ if __name__ == "__main__":
   base         = parse_list(assumptions) # Parse into Python objects
   goal_formula = parse_fstring(goal)
 
-  print(prove(base,goal_formula))
+  print(solve(base,goal_formula))
 

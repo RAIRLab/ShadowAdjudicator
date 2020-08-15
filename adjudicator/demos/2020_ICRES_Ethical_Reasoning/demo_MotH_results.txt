@@ -1,0 +1,280 @@
+(base) root@df267ad26288:/base# python demos/2020_ICRES_Ethical_Reasoning/demo_MotH.py 
+Running ShadowProver warmup...
+Done.
+
+Generating a solution to Sub-Argument 1...
+Calling ShadowProver...
+ShadowProver Done.
+Argument found in 2.5495572090148926 seconds.
+PROOF OF: (Believes!1 capt t1 (Land capt t1 lga13))
+Applied 'Level-1 Definition' to: (Believes! capt t1 (Believes! atc t1 (Land capt t1 lga13)))
+  PROOF OF: (Believes! capt t1 (Believes! atc t1 (Land capt t1 lga13)))
+  Proved via ShadowProver:
+  -->(AssumptionsNowContainsGoal
+  --> Givens:
+  -->(((Perceives! capt t1 (Says! atc t1 (Land capt t1 lga13)))
+  -->    (GIVEN[]))
+  -->
+  -->((Knows! capt t1 (Says! atc t1 (Land capt t1 lga13)))
+  -->    (Perception to knowledge (Perceives! capt t1 (Says! atc t1 (Land capt t1 lga13)))
+  --> [(GIVEN[])]))
+  -->
+  -->((Believes! capt t1 (Says! atc t1 (Land capt t1 lga13)))
+  -->    InferenceJustification{base=[(Knows! capt t1 (Says! atc t1 (Land capt t1 lga13)))], message='DR5'})
+  -->(Believes! capt t1 (Believes! atc t1 (Land capt t1 lga13)))) 
+  --> Goals:
+  -->(Believes! capt t1 (Believes! atc t1 (Land capt t1 lga13))))
+    PROOF OF: (Perceives! capt t1 (Says! atc t1 (Land capt t1 lga13)))
+    GIVEN
+
+
+Generating a solution to Sub-Argument 2...
+Calling ShadowProver...
+ShadowProver Done.
+Calling ShadowProver...
+ShadowProver Done.
+Argument found in 4.294346809387207 seconds.
+PROOF OF: (Believes!2 capt t2 (Land capt t2 teb))
+Applied 'Level-2 Definition' to: (and (Perceives! capt t2 emergency) (Believes!1 capt t2 (Land capt t2 lga13)) (R capt t2 (Land capt t2 teb) (Land capt t2 lga13)))
+  PROOF OF: (and (Perceives! capt t2 emergency) (Believes!1 capt t2 (Land capt t2 lga13)) (R capt t2 (Land capt t2 teb) (Land capt t2 lga13)))
+  Proved via ShadowProver [and a sub-argument of (Believes!1 capt t2 (Land capt t2 lga13)); (R capt t2 (Land capt t2 teb) (Land capt t2 lga13))]:
+  -->(:FOLFromSnark
+  --> Givens:
+  -->(((R capt t2 (Land  capt t2 teb) (Land  capt t2 lga13))
+  -->    (GIVEN[]))
+  -->|_Perceives!_capt_t2__Reachable_capt_t2_teb__|
+  -->|_Believes!_capt_t2__Land_capt_t2_lga13__|
+  -->|_Perceives!_capt_t2__not__Reachable_capt_t2_lga13___|
+  -->|_Perceives!_capt_t2_emergency_|) 
+  --> Goals:
+  -->|_Perceives!_capt_t2_emergency_|)
+    PROOF OF: (R capt t2 (Land capt t2 teb) (Land capt t2 lga13))
+    Applied 'Reasonableness Definition' to: (Perceives! capt t2 (Reachable capt t2 teb)); (Perceives! capt t2 (not (Reachable capt t2 lga13)))
+      PROOF OF: (Perceives! capt t2 (Reachable capt t2 teb))
+      GIVEN
+      PROOF OF: (Perceives! capt t2 (not (Reachable capt t2 lga13)))
+      GIVEN
+    PROOF OF: (Believes!1 capt t2 (Land capt t2 lga13))
+    GIVEN
+
+
+Generating a solution to Sub-Argument 3...
+Calling ShadowProver...
+ShadowProver Done.
+Argument found in 1.9968616962432861 seconds.
+PROOF OF: (Believes!1 capt t3 (Land capt t3 teb1))
+Applied 'Level-1 Definition' to: (Believes! capt t3 (Believes! atc t3 (Land capt t3 teb1)))
+  PROOF OF: (Believes! capt t3 (Believes! atc t3 (Land capt t3 teb1)))
+  Proved via ShadowProver:
+  -->(AssumptionsNowContainsGoal
+  --> Givens:
+  -->(((Perceives! capt t3 (Reachable capt t3 hud))
+  -->    (GIVEN[]))
+  -->
+  -->((Knows! capt t3 (Reachable capt t3 hud))
+  -->    (Perception to knowledge (Perceives! capt t3 (Reachable capt t3 hud))
+  --> [(GIVEN[])]))
+  -->
+  -->((Believes! capt t3 (Reachable capt t3 hud))
+  -->    InferenceJustification{base=[(Knows! capt t3 (Reachable capt t3 hud))], message='DR5'})
+  -->
+  -->((Perceives! capt t3 (not (Reachable capt t3 teb1)))
+  -->    (GIVEN[]))
+  -->
+  -->((Knows! capt t3 (not (Reachable capt t3 teb1)))
+  -->    (Perception to knowledge (Perceives! capt t3 (not (Reachable capt t3 teb1)))
+  --> [(GIVEN[])]))
+  -->
+  -->((Believes! capt t3 (not (Reachable capt t3 teb1)))
+  -->    InferenceJustification{base=[(Knows! capt t3 (not (Reachable capt t3 teb1)))], message='DR5'})
+  -->
+  -->((Perceives! capt t3 emergency)
+  -->    (GIVEN[]))
+  -->
+  -->((Knows! capt t3 emergency)
+  -->    (Perception to knowledge (Perceives! capt t3 emergency)
+  --> [(GIVEN[])]))
+  -->
+  -->((Believes! capt t3 emergency)
+  -->    InferenceJustification{base=[(Knows! capt t3 emergency)], message='DR5'})
+  -->
+  -->((Perceives! capt t3 (Says! atc t3 (Land capt t3 teb1)))
+  -->    (GIVEN[]))
+  -->
+  -->((Knows! capt t3 (Says! atc t3 (Land capt t3 teb1)))
+  -->    (Perception to knowledge (Perceives! capt t3 (Says! atc t3 (Land capt t3 teb1)))
+  --> [(GIVEN[])]))
+  -->
+  -->((Believes! capt t3 (Says! atc t3 (Land capt t3 teb1)))
+  -->    InferenceJustification{base=[(Knows! capt t3 (Says! atc t3 (Land capt t3 teb1)))], message='DR5'})
+  -->(Believes! capt t3 (Believes! atc t3 (Land capt t3 teb1)))
+  -->
+  -->((R capt t3 (Land  capt t3 hud) (Land  capt t3 lga13))
+  -->    (GIVEN[]))
+  -->
+  -->((Perceives! capt t3 (not (Reachable capt t3 lga13)))
+  -->    (GIVEN[]))
+  -->
+  -->((Knows! capt t3 (not (Reachable capt t3 lga13)))
+  -->    (Perception to knowledge (Perceives! capt t3 (not (Reachable capt t3 lga13)))
+  --> [(GIVEN[])]))
+  -->
+  -->((Believes! capt t3 (not (Reachable capt t3 lga13)))
+  -->    InferenceJustification{base=[(Knows! capt t3 (not (Reachable capt t3 lga13)))], message='DR5'})
+  -->
+  -->((R capt t3 (Land  capt t3 hud) (Land  capt t3 teb1))
+  -->    (GIVEN[]))) 
+  --> Goals:
+  -->(Believes! capt t3 (Believes! atc t3 (Land capt t3 teb1))))
+    PROOF OF: (Perceives! capt t3 emergency)
+    GIVEN
+    PROOF OF: (Perceives! capt t3 (Says! atc t3 (Land capt t3 teb1)))
+    GIVEN
+    PROOF OF: (Perceives! capt t3 (not (Reachable capt t3 lga13)))
+    GIVEN
+    PROOF OF: (Perceives! capt t3 (not (Reachable capt t3 teb1)))
+    GIVEN
+    PROOF OF: (Perceives! capt t3 (Reachable capt t3 hud))
+    GIVEN
+    PROOF OF: (R capt t3 (Land capt t3 hud) (Land capt t3 lga13))
+    Applied 'Reasonableness Definition' to: (Perceives! capt t3 (Reachable capt t3 hud)); (Perceives! capt t3 (not (Reachable capt t3 lga13)))
+    PROOF OF: (R capt t3 (Land capt t3 hud) (Land capt t3 teb1))
+    Applied 'Reasonableness Definition' to: (Perceives! capt t3 (Reachable capt t3 hud)); (Perceives! capt t3 (not (Reachable capt t3 teb1)))
+
+Calling ShadowProver...
+ShadowProver Done.
+Calling ShadowProver...
+ShadowProver Done.
+Calling ShadowProver...
+ShadowProver Done.
+Argument found in 11.011409044265747 seconds.
+PROOF OF: (Believes!2 capt t3 (Land capt t3 hud))
+Applied 'Level-2 Definition' to: (and (Perceives! capt t3 emergency) (Believes!1 capt t3 (Land capt t3 teb1)) (R capt t3 (Land capt t3 hud) (Land capt t3 teb1)))
+  PROOF OF: (and (Perceives! capt t3 emergency) (Believes!1 capt t3 (Land capt t3 teb1)) (R capt t3 (Land capt t3 hud) (Land capt t3 teb1)))
+  Proved via ShadowProver [and a sub-argument of (Believes!1 capt t3 (Land capt t3 teb1)); (R capt t3 (Land capt t3 hud) (Land capt t3 teb1))]:
+  -->(:FOLFromSnark
+  --> Givens:
+  -->(|_Believes!_capt_t3__Believes!_atc_t3__Land_capt_t3_teb1___|
+  -->|_Believes!_capt_t3__Land_capt_t3_teb1__|
+  -->|_Perceives!_capt_t3_emergency_|
+  -->|_Perceives!_capt_t3__not__Reachable_capt_t3_lga13___|
+  -->|_Perceives!_capt_t3__Reachable_capt_t3_hud__|
+  -->|_Perceives!_capt_t3__not__Reachable_capt_t3_teb1___|
+  -->|_Perceives!_capt_t3__Says!_atc_t3__Land_capt_t3_teb1___|
+  -->
+  -->((R capt t3 (Land  capt t3 hud) (Land  capt t3 lga13))
+  -->    (GIVEN[]))
+  -->
+  -->((R capt t3 (Land  capt t3 hud) (Land  capt t3 teb1))
+  -->    (GIVEN[]))) 
+  --> Goals:
+  -->|_Perceives!_capt_t3_emergency_|)
+    PROOF OF: (R capt t3 (Land capt t3 hud) (Land capt t3 lga13))
+    Applied 'Reasonableness Definition' to: (Perceives! capt t3 (Reachable capt t3 hud)); (Perceives! capt t3 (not (Reachable capt t3 lga13)))
+      PROOF OF: (Perceives! capt t3 (Reachable capt t3 hud))
+      GIVEN
+      PROOF OF: (Perceives! capt t3 (not (Reachable capt t3 lga13)))
+      GIVEN
+    PROOF OF: (R capt t3 (Land capt t3 hud) (Land capt t3 teb1))
+    Applied 'Reasonableness Definition' to: (Perceives! capt t3 (Reachable capt t3 hud)); (Perceives! capt t3 (not (Reachable capt t3 teb1)))
+      PROOF OF: (Perceives! capt t3 (not (Reachable capt t3 teb1)))
+      GIVEN
+    PROOF OF: (Believes!1 capt t3 (Land capt t3 teb1))
+    Applied 'Level-1 Definition' to: (Believes! capt t3 (Believes! atc t3 (Land capt t3 teb1)))
+      PROOF OF: (Believes! capt t3 (Believes! atc t3 (Land capt t3 teb1)))
+      Proved via ShadowProver:
+      -->(AssumptionsNowContainsGoal
+      --> Givens:
+      -->(((Perceives! capt t3 (Reachable capt t3 hud))
+      -->    (GIVEN[]))
+      -->
+      -->((Knows! capt t3 (Reachable capt t3 hud))
+      -->    (Perception to knowledge (Perceives! capt t3 (Reachable capt t3 hud))
+      --> [(GIVEN[])]))
+      -->
+      -->((Believes! capt t3 (Reachable capt t3 hud))
+      -->    InferenceJustification{base=[(Knows! capt t3 (Reachable capt t3 hud))], message='DR5'})
+      -->
+      -->((Perceives! capt t3 (not (Reachable capt t3 teb1)))
+      -->    (GIVEN[]))
+      -->
+      -->((Knows! capt t3 (not (Reachable capt t3 teb1)))
+      -->    (Perception to knowledge (Perceives! capt t3 (not (Reachable capt t3 teb1)))
+      --> [(GIVEN[])]))
+      -->
+      -->((Believes! capt t3 (not (Reachable capt t3 teb1)))
+      -->    InferenceJustification{base=[(Knows! capt t3 (not (Reachable capt t3 teb1)))], message='DR5'})
+      -->
+      -->((Perceives! capt t3 emergency)
+      -->    (GIVEN[]))
+      -->
+      -->((Knows! capt t3 emergency)
+      -->    (Perception to knowledge (Perceives! capt t3 emergency)
+      --> [(GIVEN[])]))
+      -->
+      -->((Believes! capt t3 emergency)
+      -->    InferenceJustification{base=[(Knows! capt t3 emergency)], message='DR5'})
+      -->
+      -->((Perceives! capt t3 (Says! atc t3 (Land capt t3 teb1)))
+      -->    (GIVEN[]))
+      -->
+      -->((Knows! capt t3 (Says! atc t3 (Land capt t3 teb1)))
+      -->    (Perception to knowledge (Perceives! capt t3 (Says! atc t3 (Land capt t3 teb1)))
+      --> [(GIVEN[])]))
+      -->
+      -->((Believes! capt t3 (Says! atc t3 (Land capt t3 teb1)))
+      -->    InferenceJustification{base=[(Knows! capt t3 (Says! atc t3 (Land capt t3 teb1)))], message='DR5'})
+      -->(Believes! capt t3 (Believes! atc t3 (Land capt t3 teb1)))
+      -->
+      -->((R capt t3 (Land  capt t3 hud) (Land  capt t3 lga13))
+      -->    (GIVEN[]))
+      -->
+      -->((Perceives! capt t3 (not (Reachable capt t3 lga13)))
+      -->    (GIVEN[]))
+      -->
+      -->((Knows! capt t3 (not (Reachable capt t3 lga13)))
+      -->    (Perception to knowledge (Perceives! capt t3 (not (Reachable capt t3 lga13)))
+      --> [(GIVEN[])]))
+      -->
+      -->((Believes! capt t3 (not (Reachable capt t3 lga13)))
+      -->    InferenceJustification{base=[(Knows! capt t3 (not (Reachable capt t3 lga13)))], message='DR5'})
+      -->
+      -->((R capt t3 (Land  capt t3 hud) (Land  capt t3 teb1))
+      -->    (GIVEN[]))) 
+      --> Goals:
+      -->(Believes! capt t3 (Believes! atc t3 (Land capt t3 teb1))))
+        PROOF OF: (Perceives! capt t3 emergency)
+        GIVEN
+        PROOF OF: (Perceives! capt t3 (Says! atc t3 (Land capt t3 teb1)))
+        GIVEN
+
+Calling Adjudicator...
+Final Belief: (Believes!2 adj t3 (Land capt t3 hud))
+Hence: (Knows! adj t3 (Ought! adj t3 (happens (action adj land(hud)) t3' emergency))
+
+Generating a solution to Sub-Argument 4...
+Proof found in 0.9096662998199463 seconds.
+PROOF OF: (happens (action capt (land hud)) t4)
+(AssumptionsNowContainsGoal
+ Givens:
+(((Knows! capt t3 (Ought! capt t3 emergency (happens (action  capt (land  hud)) t4)))
+    (GIVEN[]))
+(Ought! capt t3 emergency (happens (action  capt (land  hud)) t4))
+
+((Believes! capt t3 (Ought! capt t3 emergency (happens (action  capt (land  hud)) t4)))
+    InferenceJustification{base=[(Knows! capt t3 (Ought! capt t3 emergency (happens (action  capt (land  hud)) t4)))], message='DR5'})
+(happens (action  capt (land  hud)) t4)
+(Intends! capt t3 (happens (action  capt (land  hud)) t4))
+
+((Perceives! capt t3 emergency)
+    (GIVEN[]))
+
+((Knows! capt t3 emergency)
+    (Perception to knowledge (Perceives! capt t3 emergency)
+ [(GIVEN[])]))
+
+((Believes! capt t3 emergency)
+    InferenceJustification{base=[(Knows! capt t3 emergency)], message='DR5'})) 
+ Goals:
+(happens (action  capt (land  hud)) t4))
+
